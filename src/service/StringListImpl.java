@@ -186,18 +186,18 @@ public class StringListImpl implements StringListService {
         }
     }
 
-    private static boolean binarySearch(Integer[] arr, Integer item) {
+    private static boolean binarySearch(Integer[] first, Integer item) {
         int min = 0;
-        int max = arr.length - 1;
+        int max = first.length - 1;
 
         while (min <= max) {
             int mid = (min + max) / 2;
 
-            if (item == arr[mid]) {
+            if (item == first[mid]) {
                 return true;
             }
 
-            if (item < arr[mid]) {
+            if (item < first[mid]) {
                 max = mid - 1;
             } else {
                 min = mid + 1;

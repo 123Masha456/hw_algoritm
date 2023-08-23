@@ -13,7 +13,6 @@ class StringListImplTest {
         underTest = new StringListImpl(new Integer[]{39, 43, 87, 1, 3, 6, 8, 98, 43, 2});
     }
 
-
     @Test
     void addItem_itemAdded_returnAddedItem() {
         var result = underTest.add(100);

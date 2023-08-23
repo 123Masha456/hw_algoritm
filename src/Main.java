@@ -28,7 +28,6 @@ public class Main {
                 }
             }
         }
-
     }
 
     public static void sortSelection() {
@@ -42,7 +41,6 @@ public class Main {
             }
             Collections.swap(first, i, minElementIndex);
         }
-
     }
 
     public static void sortInsertion() {
@@ -56,7 +54,6 @@ public class Main {
             }
             temp = first.get(j);
         }
-
     }
 
     public static void sortBubbleTime() {

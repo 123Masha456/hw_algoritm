@@ -32,5 +32,4 @@ public interface StringListService {
 
     void swapElements(Integer[] first, int i, int minElementIndex);
 
-
 }
