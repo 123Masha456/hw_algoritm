@@ -2,23 +2,23 @@ package service;
 
 public interface StringListService {
 
-    String add(String item);
+    Integer add(int item);
 
-    String add(int index, String item);
+    Integer add(int index, int item);
 
-    String set(int index, String item);
+    Integer set(int index, int item);
 
-    String remove(String item);
+    Integer removeItem(int item);
 
-    String remove(int index);
+    Integer removeIndex(int index);
 
-    boolean contains(String item);
+    boolean contains(Integer item);
 
-    int indexOf(String item);
+    int indexOf(int item);
 
-    int lastIndexOf(String item);
+    int lastIndexOf(int item);
 
-    String get(int index);
+    Integer get(int index);
 
     boolean equals(StringListService otherList);
 
@@ -28,6 +28,9 @@ public interface StringListService {
 
     void clear();
 
-    String[] toArray();
+    Integer[] toArray();
+
+    void swapElements(Integer[] first, int i, int minElementIndex);
+
 
 }

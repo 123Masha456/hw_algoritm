@@ -10,102 +10,84 @@ class StringListImplTest {
 
     @BeforeEach
     private void beforeEach() {
-        underTest = new StringListImpl(new String[]{"a", "b", "c", "d", "e", "f", "g", "h", "e", "j"});
+        underTest = new StringListImpl(new Integer[]{39, 43, 87, 1, 3, 6, 8, 98, 43, 2});
     }
 
 
     @Test
     void addItem_itemAdded_returnAddedItem() {
-        var result = underTest.add("F");
-        assertEquals("F", result);
+        var result = underTest.add(100);
+        assertEquals(100, result);
     }
 
     @Test
     void addItem_exceptions_thrownException() {
-        assertThrows(RuntimeException.class, () -> underTest.add(null));
-        assertThrows(RuntimeException.class, () -> underTest.add(12, "S"));
+        assertThrows(RuntimeException.class, () -> underTest.add(12, 101));
     }
 
     @Test
     void setItem_itemSet_returnSetItem() {
-        var result = underTest.set(0, "Q");
-        assertEquals("Q", result);
+        var result = underTest.set(0, 102);
+        assertEquals(102, result);
     }
 
     @Test
     void setItem_exceptions_thrownException() {
-        assertThrows(RuntimeException.class, () -> underTest.set(0, null));
-        assertThrows(RuntimeException.class, () -> underTest.set(13, "W"));
+        assertThrows(RuntimeException.class, () -> underTest.set(13, 103));
     }
 
     @Test
     void removeItem_itemRemoved_returnRemovedItem() {
-        var result = underTest.remove("b");
-        assertEquals("b", result);
+        var result = underTest.removeItem(2);
+        assertEquals(2, result);
     }
 
     @Test
     void removeItemUsingIndex_itemRemoved_returnRemovedItem() {
-        var result = underTest.remove(0);
-        assertEquals("a", result);
+        var result = underTest.removeIndex(0);
+        assertEquals(39, result);
     }
 
     @Test
     void removeItem_exceptions_thrownException() {
-        assertThrows(RuntimeException.class, () -> underTest.remove(null));
-        assertThrows(RuntimeException.class, () -> underTest.remove(50));
+        assertThrows(RuntimeException.class, () -> underTest.removeIndex(50));
 
     }
 
     @Test
     void containsItem_itemIsInArray_returnTrue() {
-        var result = underTest.contains("j");
+        var result = underTest.contains(98);
         assertEquals(true, result);
     }
 
     @Test
-    void containsItem_exceptions_thrownException() {
-        assertThrows(RuntimeException.class, () -> underTest.contains(null));
-    }
-
-    @Test
     void indexOfItem_itemFound_returnItem() {
-        var result = underTest.indexOf("a");
-        assertEquals(0, result);
+        var result = underTest.indexOf(43);
+        assertEquals(1, result);
     }
 
     @Test
     void indexOfItem_itemNotFound_returnSignMinus1() {
-        var result = underTest.indexOf("P");
+        var result = underTest.indexOf(654);
         assertEquals(-1, result);
     }
 
     @Test
-    void indexOfItem_exception_thrownException() {
-        assertThrows(RuntimeException.class, () -> underTest.indexOf(null));
-    }
-
-    @Test
     void lastIndexOfItemInArray_lastIndexWasFound_returnLastIndex() {
-        var result = underTest.lastIndexOf("j");
+        var result = underTest.lastIndexOf(2);
         assertEquals(9, result);
     }
 
     @Test
     void lastIndexOfItemInArray_itemNotFound_returnSighMinus1() {
-        var result = underTest.lastIndexOf("y");
+        var result = underTest.lastIndexOf(321);
         assertEquals(-1, result);
     }
 
     @Test
-    void lastIndexOfItemInArray_exception_thrownException() {
-        assertThrows(RuntimeException.class, () -> underTest.lastIndexOf(null));
-    }
-
-    @Test
     void getItem_itemWasFound_returnItem() {
-        var result = underTest.get(2);
-        assertEquals("c", result);
+        var result = underTest.get(3);
+        assertEquals(1, result);
     }
 
     @Test
@@ -115,8 +97,9 @@ class StringListImplTest {
 
     @Test
     void equalsStringListAndOtherList_ArraysAreEquals_returnTrue() {
-        assertArrayEquals(new String[]{"a", "b", "c", "d", "e", "f", "g", "h", "e", "j"}, underTest.toArray());
-
+        assertArrayEquals(new Integer[]
+                        {39, 43, 87, 1, 3, 6, 8, 98, 43, 2},
+                underTest.toArray());
     }
 
     @Test
@@ -135,18 +118,17 @@ class StringListImplTest {
     void arrayIsEmpty_returnFalse() {
         underTest.isEmpty();
         assertEquals(false, underTest.isEmpty());
-
     }
 
     @Test
     void clearArray_arrayHasNoItems_returnClearArray() {
         underTest.clear();
-        assertArrayEquals(new String[0], underTest.toArray());
+        assertArrayEquals(new Integer[0], underTest.toArray());
     }
 
     @Test
     void toMakeNewArray_itemsFromPreviousArrayAreInNewArray_returnNewArray() {
         var result = underTest.toArray();
-        assertArrayEquals(new String[]{"a", "b", "c", "d", "e", "f", "g", "h", "e", "j"}, result);
+        assertArrayEquals(new Integer[]{39, 43, 87, 1, 3, 6, 8, 98, 43, 2}, result);
     }
 }

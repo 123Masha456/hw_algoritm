@@ -8,42 +8,39 @@ import static java.lang.System.arraycopy;
 
 public class StringListImpl implements StringListService {
 
-    private String[] items;
-    private static final int STRING_MAX_SIZE = 10;
+    private Integer[] items;
+    private static final int INTEGER_MAX_SIZE = 10;
     private int size = 0;
 
-    public StringListImpl(String[] items) {
+    public StringListImpl(Integer[] items) {
         for (int i = 0; i < items.length; i++) {
             if (items[i] == null) {
                 throw new RuntimeException("NULL IS NOT ACCEPTED");
             }
         }
-        if (items.length >= STRING_MAX_SIZE) {
-            size = STRING_MAX_SIZE;
+        if (items.length >= INTEGER_MAX_SIZE) {
+            size = INTEGER_MAX_SIZE;
         } else {
             size = items.length;
         }
-        this.items = Arrays.copyOf(items, STRING_MAX_SIZE);
+        this.items = Arrays.copyOf(items, INTEGER_MAX_SIZE);
     }
 
     private void extendArray() {
-        String[] buffer = new String[items.length + 1];
+        Integer[] buffer = new Integer[items.length + 1];
         arraycopy(items, 0, buffer, 0, items.length);
         items = buffer;
     }
 
     private void reduceArray() {
-        String[] reduce = new String[items.length - 1];
+        Integer[] reduce = new Integer[items.length - 1];
         arraycopy(items, 0, reduce, 0, reduce.length);
         items = reduce;
     }
 
 
     @Override
-    public String add(String item) {
-        if (item == null) {
-            throw new RuntimeException("NULL IS NOT ACCEPTED");
-        }
+    public Integer add(int item) {
         extendArray();
         items[items.length - 1] = item;
 
@@ -51,12 +48,9 @@ public class StringListImpl implements StringListService {
     }
 
     @Override
-    public String add(int index, String item) {
-        if (index > STRING_MAX_SIZE || index < 0) {
+    public Integer add(int index, int item) {
+        if (index > INTEGER_MAX_SIZE || index < 0) {
             throw new RuntimeException("EXCEEDED ARRAY'S AMOUNT");
-        }
-        if (item == null) {
-            throw new RuntimeException("NULL IS NOT ACCEPTED");
         }
         arraycopy(items, index, items, index + 1, items.length - index - 1);
         items[index] = item;
@@ -65,22 +59,16 @@ public class StringListImpl implements StringListService {
     }
 
     @Override
-    public String set(int index, String item) {
-        if (index > STRING_MAX_SIZE || index < 0) {
+    public Integer set(int index, int item) {
+        if (index > INTEGER_MAX_SIZE || index < 0) {
             throw new RuntimeException("EXCEEDED ARRAY'S AMOUNT");
-        }
-        if (item == null) {
-            throw new RuntimeException("NULL IS NOT ACCEPTED");
         }
         items[index] = item;
         return item;
     }
 
     @Override
-    public String remove(String item) {
-        if (item == null) {
-            throw new RuntimeException("NO ITEM WAS FOUND");
-        }
+    public Integer removeItem(int item) {
         for (int i = 0; i < items.length; i++) {
             if (items[i].equals(item)) {
                 arraycopy(items, i + 1, items, i, items.length - i - 1);
@@ -92,8 +80,8 @@ public class StringListImpl implements StringListService {
     }
 
     @Override
-    public String remove(int index) {
-        if (index > STRING_MAX_SIZE || index < 0) {
+    public Integer removeIndex(int index) {
+        if (index > INTEGER_MAX_SIZE || index < 0) {
             throw new RuntimeException("EXCEEDED ARRAY'S AMOUNT");
         }
         var item = items[index];
@@ -104,23 +92,15 @@ public class StringListImpl implements StringListService {
     }
 
     @Override
-    public boolean contains(String item) {
-        if (item == null) {
-            throw new RuntimeException("NO ITEM WAS FOUND");
-        }
-        for (String entry : items) {
-            if (entry.equals(item)) {
-                return true;
-            }
-        }
-        return false;
+    public boolean contains(Integer item) {
+        Integer[] storageCopy = toArray();
+        sort(storageCopy);
+        return binarySearch(storageCopy, item);
+
     }
 
     @Override
-    public int indexOf(String item) {
-        if (item == null) {
-            throw new RuntimeException("NO ITEM WAS FOUND");
-        }
+    public int indexOf(int item) {
         for (int i = 0; i < items.length; i++) {
             if (items[i].equals(item)) {
                 return i;
@@ -130,10 +110,7 @@ public class StringListImpl implements StringListService {
     }
 
     @Override
-    public int lastIndexOf(String item) {
-        if (item == null) {
-            throw new RuntimeException("NO ITEM WAS FOUND");
-        }
+    public int lastIndexOf(int item) {
         for (int i = items.length - 1; i >= 0; i--) {
             if (items[i].equals(item))
                 return i;
@@ -142,9 +119,9 @@ public class StringListImpl implements StringListService {
     }
 
     @Override
-    public String get(int index) {
+    public Integer get(int index) {
         for (int i = 0; i < items.length; i++) {
-            if (index > STRING_MAX_SIZE) {
+            if (index > INTEGER_MAX_SIZE) {
                 throw new RuntimeException("EXCEEDED ARRAY'S AMOUNT");
             }
         }
@@ -184,12 +161,50 @@ public class StringListImpl implements StringListService {
 
     @Override
     public void clear() {
-        this.items = new String[0];
+        this.items = new Integer[0];
     }
 
     @Override
-    public String[] toArray() {
+    public Integer[] toArray() {
         return Arrays.copyOf(items, items.length);
     }
+
+    @Override
+    public void swapElements(Integer[] first, int i, int minElementIndex) {
+    }
+
+
+    private void sort(Integer[] first) {
+        for (int i = 0; i < first.length - 1; i++) {
+            int minElementIndex = i;
+            for (int j = i + 1; j < first.length; j++) {
+                if (first[j] < first[minElementIndex]) {
+                    minElementIndex = j;
+                }
+            }
+            swapElements(first, i, minElementIndex);
+        }
+    }
+
+    private static boolean binarySearch(Integer[] arr, Integer item) {
+        int min = 0;
+        int max = arr.length - 1;
+
+        while (min <= max) {
+            int mid = (min + max) / 2;
+
+            if (item == arr[mid]) {
+                return true;
+            }
+
+            if (item < arr[mid]) {
+                max = mid - 1;
+            } else {
+                min = mid + 1;
+            }
+        }
+        return false;
+    }
 }
+
 
