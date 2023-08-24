@@ -20,11 +20,6 @@ class StringListImplTest {
     }
 
     @Test
-    void addItem_exceptions_thrownException() {
-        assertThrows(RuntimeException.class, () -> underTest.add(12, 101));
-    }
-
-    @Test
     void setItem_itemSet_returnSetItem() {
         var result = underTest.set(0, 102);
         assertEquals(102, result);

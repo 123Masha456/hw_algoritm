@@ -29,7 +29,4 @@ public interface StringListService {
     void clear();
 
     Integer[] toArray();
-
-    void swapElements(Integer[] first, int i, int minElementIndex);
-
 }

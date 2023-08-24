@@ -12,7 +12,6 @@ public class Main {
         sortBubble();
         sortSelection();
         sortInsertion();
-
         sortBubbleTime();
         sortSelectionTime();
         sortInsertionTime();

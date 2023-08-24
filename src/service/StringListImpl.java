@@ -50,7 +50,7 @@ public class StringListImpl implements StringListService {
     @Override
     public Integer add(int index, int item) {
         if (index > INTEGER_MAX_SIZE || index < 0) {
-            throw new RuntimeException("EXCEEDED ARRAY'S AMOUNT");
+            grow();
         }
         arraycopy(items, index, items, index + 1, items.length - index - 1);
         items[index] = item;
@@ -61,7 +61,7 @@ public class StringListImpl implements StringListService {
     @Override
     public Integer set(int index, int item) {
         if (index > INTEGER_MAX_SIZE || index < 0) {
-            throw new RuntimeException("EXCEEDED ARRAY'S AMOUNT");
+            throw new RuntimeException("ARRAY'S AMOUNT EXCEEDED");
         }
         items[index] = item;
         return item;
@@ -82,7 +82,7 @@ public class StringListImpl implements StringListService {
     @Override
     public Integer removeIndex(int index) {
         if (index > INTEGER_MAX_SIZE || index < 0) {
-            throw new RuntimeException("EXCEEDED ARRAY'S AMOUNT");
+            throw new RuntimeException("ARRAY'S AMOUNT EXCEEDED");
         }
         var item = items[index];
         arraycopy(items, index + 1, items, index, items.length - index - 1);
@@ -122,7 +122,7 @@ public class StringListImpl implements StringListService {
     public Integer get(int index) {
         for (int i = 0; i < items.length; i++) {
             if (index > INTEGER_MAX_SIZE) {
-                throw new RuntimeException("EXCEEDED ARRAY'S AMOUNT");
+                throw new RuntimeException("ARRAY'S AMOUNT EXCEEDED");
             }
         }
         return items[index];
@@ -169,35 +169,58 @@ public class StringListImpl implements StringListService {
         return Arrays.copyOf(items, items.length);
     }
 
-    @Override
-    public void swapElements(Integer[] first, int i, int minElementIndex) {
+    private void grow() {
+        items = Arrays.copyOf(items, size + size / 2);
     }
 
+    private void sort(Integer[] items) {
+        quickSort(items, 0, items.length - 1);
+    }
 
-    private void sort(Integer[] first) {
-        for (int i = 0; i < first.length - 1; i++) {
-            int minElementIndex = i;
-            for (int j = i + 1; j < first.length; j++) {
-                if (first[j] < first[minElementIndex]) {
-                    minElementIndex = j;
-                }
-            }
-            swapElements(first, i, minElementIndex);
+    private void quickSort(Integer[] items, int begin, int end) {
+        if (begin < end) {
+            int partitionIndex = partition(items, begin, end);
+
+            quickSort(items, begin, partitionIndex - 1);
+            quickSort(items, partitionIndex + 1, end);
         }
     }
 
-    private static boolean binarySearch(Integer[] first, Integer item) {
+    private static int partition(Integer[] arr, int begin, int end) {
+        int pivot = arr[end];
+        int i = (begin - 1);
+
+        for (int j = begin; j < end; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+
+                swapElements(arr, i, j);
+            }
+        }
+
+        swapElements(arr, i + 1, end);
+        return i + 1;
+    }
+
+    private static void swapElements(Integer[] items, int a1, int a2) {
+        int temp = items[a1];
+        items[a1] = items[a2];
+        items[a2] = temp;
+    }
+
+
+    private static boolean binarySearch(Integer[] items, Integer item) {
         int min = 0;
-        int max = first.length - 1;
+        int max = items.length - 1;
 
         while (min <= max) {
             int mid = (min + max) / 2;
 
-            if (item == first[mid]) {
+            if (item == items[mid]) {
                 return true;
             }
 
-            if (item < first[mid]) {
+            if (item < items[mid]) {
                 max = mid - 1;
             } else {
                 min = mid + 1;
